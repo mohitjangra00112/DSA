@@ -118,6 +118,200 @@ public class LinkedList {
             return val;
         }
 
+        public int itrSearch(int key){
+            Node temp = Head;
+            int index=0;
+
+            while(temp.next != null){
+                if(temp.data == key){
+                    return index;
+                }
+
+                temp = temp.next;
+                index++;
+            }
+
+            // key not found 
+
+            return (-1);
+
+        }
+
+        public int helper(Node Head , int key){
+                if(Head == null ){
+                    return -1;
+                }
+
+                if(Head.data == key){
+                    return 0;
+                }
+
+                int index = helper(Head.next, key);
+
+                if(index == -1){
+                    return -1;
+                }
+
+                return index+1;
+        }
+
+        public int recSearch(int key){
+              
+            return helper(Head , key);
+
+        }
+
+        public void reverse(){
+            // prev  , curr , next 
+            Node prev = null;
+            Node curr = Tail = Head;
+            Node next;
+
+            while(curr !=null){
+                next = curr.next;
+                curr.next = prev;
+                prev = curr;
+                curr = next;
+            }
+            Head = prev;
+        }
+
+        public void deleteNthEnd(int index){
+            // find size
+            int sz=0;
+            Node temp = Head;
+            while(temp!=null){
+                temp=temp.next;
+                sz++;
+            }
+
+            // if index == sz  // remove head so 
+            if(index == sz){
+                Head = Head.next;  // remove first
+                return;
+            }
+
+            // nth from last means size-index+1 from starting 
+
+             int i=1;
+             int indexFromStart = sz-index;
+             Node prev = Head;
+
+             while(i<indexFromStart){
+                prev=prev.next;
+                i++;
+             }
+
+             prev.next = prev.next.next;
+             return;
+
+        }
+
+        // Slow - Fast Approach
+        public Node findMiddle(Node Head){   // Slow - Fast Method using 2 pointers ( +1 and +2 )
+            Node slow = Head;
+            Node fast = Head;
+
+            while(fast != null && fast.next != null){
+                slow = slow.next;   // +1
+                fast = fast.next.next;  // +2
+            }
+
+            return slow;
+        }
+
+        public boolean checkPalindrome(){
+             
+            if( Head == null || Head.next == null){
+                return true;
+            }
+
+            // Step 1 Find mid
+
+            Node midNode = findMiddle(Head);
+            
+            // Step 2  Reverse Right LL
+
+            Node prev = null;
+            Node curr = midNode;
+            Node next;
+
+            while(curr!=null){
+                next = curr.next;
+                curr.next = prev;
+                prev = curr;
+                curr = next;
+            }
+
+            Node right = prev;  // right half Head
+            Node left = Head;   // left half Head
+            
+            // Step 3  compare Left and Right Nodes
+
+            while(right != null){
+                if(left.data != right.data){
+                    return false;
+                }
+
+                left= left.next;
+                right = right.next;
+            }
+
+            return true;
+
+        }
+           // Floyds Cycle Finding Algorithm || Slow - Fast Algorithm
+        public boolean isCycle(){  
+            Node slow = Head;
+            Node fast = Head;
+
+            while(fast != null && fast.next != null){
+                slow = slow.next;
+                fast = fast.next.next;
+                if(slow == fast){
+                    return true;   // cycle detected
+                }
+            }
+            return false;
+        }
+
+        public void removeCycle(){
+            // Step 1 Detect Cycle
+
+            Node slow = Head;
+            Node fast = Head;
+            boolean cycle= false;
+            while(fast != null && fast.next != null){
+                slow = slow.next;
+                fast = fast.next.next;
+                if (slow == fast) {
+                    cycle = true;
+                    break;
+                }
+            }
+
+            if(cycle == false){
+                return;
+            }
+
+            // step 2  Find Last node 
+
+            Node prev = null;
+            slow = Head;
+
+            while(slow != fast){
+                prev=fast;
+                slow=slow.next;
+                fast = fast.next;
+            }
+
+            // Step 3  Remove Cycle
+
+            prev.next = null;
+            
+
+        }
+
         public void print(){
             Node temp = Head;
 
@@ -125,6 +319,7 @@ public class LinkedList {
                 System.out.print(temp.data + " -> ");
                 temp = temp.next;
             }
+            System.out.println();
         }
 
     public static void main(String args[]){
@@ -139,6 +334,11 @@ public class LinkedList {
         ll.print();
         System.out.println();
         System.out.println(size);
+        ll.removeFirst();      // 2 -> 6 -> 3 -> 4
+        ll.removeLast();       // 2 -> 6 -> 3
+        ll.print();
+        System.out.println("Result of Search " + ll.itrSearch(5));   //// search 
+        System.out.println("Result of Search " + ll.itrSearch(6));   //// search 
     }
 
 }

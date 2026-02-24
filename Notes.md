@@ -84,3 +84,10 @@ steps
 3. Else  Temp -> Treverse till size-2
 4. Temp.next = null ,  Tail = Temp  
 5. See function removeLast for more understanding
+
+# Iterative Search in Linked List O(n)
+steps
+1. Node Temp = Head   ,   index = 0 
+2. Run loop till temp.next != null  and increase index ++
+3. Search for temp.data == key 
+4. If found return index else returrn -1
